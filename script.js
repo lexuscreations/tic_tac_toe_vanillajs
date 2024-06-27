@@ -3,7 +3,7 @@ const initialState = {
   winner: null,
   currentPlayer: "X",
   board: () => Array(9).fill(null),
-  messageElementText: `X Goes First`,
+  initialMessage: "X Goes First",
   winPatterns: [
     [0, 1, 2, "horizontalTop"],
     [3, 4, 5, "horizontalMiddle"],
@@ -18,18 +18,12 @@ const initialState = {
 
 // TicTacToe class to encapsulate game logic and state
 class TicTacToe {
-  constructor({
-    board,
-    winner,
-    winPatterns,
-    currentPlayer,
-    messageElementText,
-  }) {
+  constructor({ board, winner, winPatterns, currentPlayer, initialMessage }) {
     this.board = board(); // Initialize board with empty cells
     this.winner = winner; // Initialize winner as null
     this.winPatterns = winPatterns; // Initialize winning patterns
     this.currentPlayer = currentPlayer; // Set the starting player
-    this.messageElementText = messageElementText; // Set the initial message
+    this.initialMessage = initialMessage; // Set the initial message
 
     // Cache DOM elements for later use
     this.cacheDOMElements();
@@ -41,25 +35,25 @@ class TicTacToe {
 
   // Cache DOM elements to avoid querying the DOM multiple times
   cacheDOMElements() {
-    this.gridBoard = document.querySelector(".grid");
+    this.gridElement = document.querySelector(".grid");
     this.lineElement = document.querySelector(".line");
-    this.resetGameBtn = document.querySelector(".resetGameBtn");
-    this.messageElement = document.querySelector(".messageElement");
+    this.resetButton = document.querySelector(".reset-game-btn");
+    this.messageElement = document.querySelector(".message-element");
   }
 
   // Bind event listeners to DOM elements
   bindEvents() {
-    this.resetGameBtn.addEventListener("click", this.resetGame.bind(this));
+    this.resetButton.addEventListener("click", this.resetGame.bind(this));
     document
       .querySelectorAll(".cell")
       .forEach((cell) =>
-        cell.addEventListener("click", this.handleClick.bind(this))
+        cell.addEventListener("click", this.handleCellClick.bind(this))
       );
   }
 
   // Initialize the game state and update the message element
   init() {
-    this.messageElement.innerText = this.messageElementText;
+    this.messageElement.innerText = this.initialMessage;
   }
 
   // Check if there's a winner or if the game is a draw
@@ -82,15 +76,15 @@ class TicTacToe {
   }
 
   // Handle click events on the game cells
-  handleClick(event) {
-    const id = +event.target.id; // Get the clicked cell id
-    if (this.board[id] || this.winner) return; // Ignore if cell is already filled or if there's a winner
+  handleCellClick(event) {
+    const cellIndex = +event.target.id; // Get the clicked cell id
+    if (this.board[cellIndex] || this.winner) return; // Ignore if cell is already filled or if there's a winner
 
     // Update board state and UI
-    this.board[id] = this.currentPlayer;
+    this.board[cellIndex] = this.currentPlayer;
     event.target.innerText = this.currentPlayer;
     event.target.classList.add("disable");
-    this.resetGameBtn.classList.remove("hidden");
+    this.resetButton.classList.remove("hidden");
 
     // Check for winner or change turn
     if (this.checkWinner()) return;
@@ -107,7 +101,7 @@ class TicTacToe {
 
     this.winner = this.currentPlayer; // Set the winner
     this.messageElement.innerText = message;
-    this.gridBoard.classList.add("disable");
+    this.gridElement.classList.add("disable");
     return true;
   }
 
@@ -117,10 +111,10 @@ class TicTacToe {
     Object.assign(this, initialState, { board: initialState.board() });
 
     // Reset UI elements
-    this.messageElement.innerText = this.messageElementText;
+    this.messageElement.innerText = this.initialMessage;
     this.lineElement.style.display = "none";
-    this.gridBoard.classList.remove("disable");
-    this.resetGameBtn.classList.add("hidden");
+    this.gridElement.classList.remove("disable");
+    this.resetButton.classList.add("hidden");
 
     // Reset line element classes
     this.lineElement.className = "line";

@@ -7,10 +7,14 @@
     <title>Tic Tac Toe</title>
   </head>
   <body>
-    <div class="centerContainer">
+    <!-- Main container for centering content -->
+    <div class="center-container">
+      <!-- Line element for indicating the winning pattern -->
       <div class="line"></div>
 
+      <!-- Grid container for Tic Tac Toe cells -->
       <div class="grid">
+        <!-- Tic Tac Toe cells with unique IDs -->
         <div id="0" class="cell"></div>
         <div id="1" class="cell"></div>
         <div id="2" class="cell"></div>
@@ -22,9 +26,14 @@
         <div id="8" class="cell"></div>
       </div>
 
-      <div class="messageElement"></div>
-      <button class="resetGameBtn hidden">Reset</button>
+      <!-- Element for displaying messages (e.g., current player's turn, game result) -->
+      <div class="message-element"></div>
+
+      <!-- Button to reset the game, initially hidden -->
+      <button class="reset-game-btn hidden">Reset</button>
     </div>
+
+    <!-- Script for handling the game logic -->
     <script src="./script.js"></script>
   </body>
 </html>

@@ -1,3 +1,4 @@
+/* Reset default margin, padding, and box-sizing for all elements */
 *,
 *::after,
 *::before {
@@ -6,29 +7,32 @@
   box-sizing: border-box;
 }
 
+/* Basic styling for the body */
 body {
   display: flex;
   min-height: 100vh;
   align-items: center;
-  background: aliceblue;
   justify-content: center;
+  background: aliceblue;
   font-family: cursive, sans-serif;
 }
 
-.centerContainer {
+/* Main container for centering content */
+.center-container {
   display: flex;
   padding: 1rem;
   width: fit-content;
-  position: relative;
   height: fit-content;
-  align-items: center;
+  position: relative;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
 
-.centerContainer .grid {
-  gap: 2px;
+/* Styling for the Tic Tac Toe grid */
+.center-container .grid {
   display: grid;
+  gap: 2px;
   overflow: hidden;
   user-select: none;
   border-radius: 11px;
@@ -37,110 +41,119 @@ body {
   grid-template-columns: repeat(3, minmax(clamp(80px, 20vw, 150px), 1fr));
 }
 
-.centerContainer .grid .cell {
+/* Styling for individual cells in the grid */
+.center-container .grid .cell {
   display: flex;
-  cursor: pointer;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   border: 2px solid black;
   font-size: clamp(24px, 6vw, 77px);
 }
 
-.centerContainer .grid .cell.disable {
+/* Disable cursor pointer for disabled cells */
+.center-container .grid .cell.disable {
   cursor: auto;
 }
 
-.centerContainer .grid .cell:first-child,
-.centerContainer .grid .cell:nth-child(2),
-.centerContainer .grid .cell:nth-child(3) {
+/* Remove borders for specific cells to create the Tic Tac Toe grid effect */
+.center-container .grid .cell:first-child,
+.center-container .grid .cell:nth-child(2),
+.center-container .grid .cell:nth-child(3) {
   border-top: none;
 }
 
-.centerContainer .grid .cell:nth-child(3n + 1) {
+.center-container .grid .cell:nth-child(3n + 1) {
   border-left: none;
 }
 
-.centerContainer .grid .cell:nth-child(3n + 3) {
+.center-container .grid .cell:nth-child(3n + 3) {
   border-right: none;
 }
 
-.centerContainer .grid .cell:last-child,
-.centerContainer .grid .cell:nth-child(7),
-.centerContainer .grid .cell:nth-child(8) {
+.center-container .grid .cell:last-child,
+.center-container .grid .cell:nth-child(7),
+.center-container .grid .cell:nth-child(8) {
   border-bottom: none;
 }
 
-.centerContainer .grid.disable,
-.centerContainer .line {
+/* Styling for disabled grid and line elements */
+.center-container .grid.disable,
+.center-container .line {
   opacity: 0.3;
   background: #00000017;
 }
 
-.centerContainer .grid:not(.disable) .cell:hover {
+/* Hover effect for active cells */
+.center-container .grid:not(.disable) .cell:hover {
   background: #0000000a;
 }
 
-.centerContainer .grid.disable .cell {
+/* Ensure cells in disabled grid have no pointer cursor */
+.center-container .grid.disable .cell {
   cursor: auto;
 }
 
-.centerContainer .messageElement {
+/* Styling for the message element */
+.center-container .message-element {
   margin-top: 10px;
   font-weight: 800;
   color: #f1b931;
-  padding-block: 3px;
+  padding: 3px 7rem;
   border-radius: 1rem;
-  padding-inline: 7rem;
   background: #07036dcf;
   font-size: clamp(18px, 4vw, 25px);
 }
 
-.centerContainer .line {
+/* Base styling for the winning line element */
+.center-container .line {
   top: 41%;
   width: 85%;
   display: none;
   height: 0.3rem;
-  border-radius: 50%;
   position: absolute;
+  border-radius: 50%;
   background-color: black;
 }
 
-.centerContainer .line.leftDiagonal {
-  rotate: 45deg;
+/* Winning line position classes */
+.center-container .line.leftDiagonal {
+  transform: rotate(45deg);
 }
 
-.centerContainer .line.rightDiagonal {
-  rotate: -45deg;
+.center-container .line.rightDiagonal {
+  transform: rotate(-45deg);
 }
 
-.centerContainer .line.horizontalMiddle {
+.center-container .line.horizontalMiddle {
   top: 41.1%;
-  rotate: 0deg;
+  transform: rotate(0deg);
 }
 
-.centerContainer .line.horizontalTop {
+.center-container .line.horizontalTop {
   top: 15.5%;
 }
 
-.centerContainer .line.horizontalBottom {
+.center-container .line.horizontalBottom {
   top: 66.6%;
 }
 
-.centerContainer .line.verticalLeft {
+.center-container .line.verticalLeft {
   left: -23.7%;
-  rotate: 90deg;
+  transform: rotate(90deg);
 }
 
-.centerContainer .line.verticalMiddle {
-  rotate: 90deg;
+.center-container .line.verticalMiddle {
+  transform: rotate(90deg);
 }
 
-.centerContainer .line.verticalRight {
+.center-container .line.verticalRight {
   left: 38.9%;
-  rotate: 90deg;
+  transform: rotate(90deg);
 }
 
-.resetGameBtn {
+/* Styling for the reset button */
+.center-container .reset-game-btn {
   border: none;
   outline: none;
   cursor: pointer;
@@ -152,17 +165,19 @@ body {
   font-size: clamp(16px, 3vw, 22px);
 }
 
-.resetGameBtn.hidden {
+/* Hidden state for the reset button */
+.center-container .reset-game-btn.hidden {
   opacity: 0;
   user-select: none;
   visibility: hidden;
   pointer-events: none;
 }
 
-.resetGameBtn:hover {
+/* Hover and active states for the reset button */
+.center-container .reset-game-btn:hover {
   transform: scale(1.1);
 }
 
-.resetGameBtn:active {
+.center-container .reset-game-btn:active {
   transform: scale(0.9);
 }
