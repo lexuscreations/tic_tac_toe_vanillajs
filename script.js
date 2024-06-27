@@ -1,9 +1,9 @@
-const getInitialStateValues = {
+const initialState = {
   winner: null,
   currentPlayer: "X",
   board: () => Array(9).fill(null),
   messageElementText: `X Goes First`,
-  winPatterns: () => [
+  winPatterns: [
     [0, 1, 2, "horizontalTop"],
     [3, 4, 5, "horizontalMiddle"],
     [6, 7, 8, "horizontalBottom"],
@@ -16,52 +16,69 @@ const getInitialStateValues = {
 };
 
 class TicTacToe {
-  constructor({ board, winner, winPatterns, currentPlayer }) {
+  constructor({
+    board,
+    winner,
+    winPatterns,
+    currentPlayer,
+    messageElementText,
+  }) {
     this.board = board();
     this.winner = winner;
-    this.winPatterns = winPatterns();
+    this.winPatterns = winPatterns;
     this.currentPlayer = currentPlayer;
+    this.messageElementText = messageElementText;
 
-    this.gridBoard = document.querySelector(".grid");
-    this.lineElement = document.querySelector(".line");
-    this.resetGameBtnEl = document.querySelector(".resetGameBtn");
-    this.messageElement = document.querySelector(".messageElement");
-
+    this.cacheDOMElements();
+    this.bindEvents();
     this.init();
   }
 
-  init() {
-    this.messageElement.innerText = getInitialStateValues.messageElementText;
-    this.resetGameBtnEl.addEventListener("click", this.resetGame.bind(this));
+  cacheDOMElements() {
+    this.gridBoard = document.querySelector(".grid");
+    this.lineElement = document.querySelector(".line");
+    this.resetGameBtn = document.querySelector(".resetGameBtn");
+    this.messageElement = document.querySelector(".messageElement");
+  }
 
-    document.querySelectorAll(".cell").forEach((cell) => {
-      cell.addEventListener("click", this.handleClick.bind(this));
-    });
+  bindEvents() {
+    this.resetGameBtn.addEventListener("click", this.resetGame.bind(this));
+    document
+      .querySelectorAll(".cell")
+      .forEach((cell) =>
+        cell.addEventListener("click", this.handleClick.bind(this))
+      );
+  }
+
+  init() {
+    this.messageElement.innerText = this.messageElementText;
   }
 
   checkWinner() {
-    for (const pattern of this.winPatterns) {
-      const [a, b, c, lineClass] = pattern;
-
+    for (const [a, b, c, lineClass] of this.winPatterns) {
       if (
         this.board[a] &&
         this.board[a] === this.board[b] &&
         this.board[a] === this.board[c]
-      )
+      ) {
         return this.endGame(`${this.currentPlayer} Won`, lineClass);
+      }
     }
 
-    if (!this.board.includes(null)) return this.endGame("Draw");
+    if (!this.board.includes(null)) {
+      return this.endGame("Draw");
+    }
   }
 
   handleClick(event) {
-    const id = Number(event.target.id);
+    const id = +event.target.id;
     if (this.board[id] || this.winner) return;
 
     this.board[id] = this.currentPlayer;
     event.target.innerText = this.currentPlayer;
     event.target.classList.add("disable");
-    this.resetGameBtnEl.classList.remove("hidden");
+    this.resetGameBtn.classList.remove("hidden");
+
     if (this.checkWinner()) return;
     this.currentPlayer = this.currentPlayer === "X" ? "O" : "X";
     this.messageElement.innerText = `${this.currentPlayer} Turn`;
@@ -72,31 +89,24 @@ class TicTacToe {
       this.lineElement.classList.add(lineClass);
       this.lineElement.style.display = "block";
     }
+
     this.winner = this.currentPlayer;
     this.messageElement.innerText = message;
     this.gridBoard.classList.add("disable");
-
     return true;
   }
 
   resetGame() {
-    const { board, winner, currentPlayer, messageElementText } =
-      getInitialStateValues;
+    Object.assign(this, initialState, { board: initialState.board() });
 
-    this.board = board();
-    this.winner = winner;
-    this.currentPlayer = currentPlayer;
-    this.messageElement.innerText = messageElementText;
-
+    this.messageElement.innerText = this.messageElementText;
     this.lineElement.style.display = "none";
     this.gridBoard.classList.remove("disable");
-    this.resetGameBtnEl.classList.add("hidden");
-    this.lineElement.classList.forEach(
-      (className) =>
-        className !== "line" && this.lineElement.classList.remove(className)
-    );
+    this.resetGameBtn.classList.add("hidden");
+
+    this.lineElement.className = "line";
     document.querySelectorAll(".cell").forEach((cell) => {
-      cell.innerText = null;
+      cell.innerText = "";
       cell.classList.remove("disable");
     });
   }
@@ -104,5 +114,5 @@ class TicTacToe {
 
 document.addEventListener(
   "DOMContentLoaded",
-  () => new TicTacToe(getInitialStateValues)
+  () => new TicTacToe(initialState)
 );
